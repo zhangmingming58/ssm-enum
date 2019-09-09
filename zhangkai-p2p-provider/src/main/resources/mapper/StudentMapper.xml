@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhangkai.dao.StudentMapper">
+
+	<resultMap type="student" id="stuMapper">
+		<!-- 数据库保存的是int类型 枚举数值在枚举列表中出现索引序号 -->
+		<result column="sex" property="sex"
+			typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler" />
+
+		<!-- 数据库保存的是字符串类型 数据库中的内容就是枚举的值 -->
+		<!-- <result column="zzmm" property="zzmm" typeHandler="org.apache.ibatis.type.EnumTypeHandler"/> -->
+	</resultMap>
+
+
+
+	<!-- int add(Student student); List<Student> select(StudentVo vo); -->
+	<select id="select" resultMap="stuMapper">
+		select * from tb_student
+		<where>
+			<if test="vo!=null">
+				<if test="vo.sex!=null ">
+					sex =
+					#{vo.sex,jdbcType=INTEGER,javaType=SexEnum,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler}
+				</if>
+			</if>
+		</where>
+	</select>
+
+
+
+
+
+	<insert id="add"> insert into tb_student(name,sex) values(#{name},
+		#{sex,jdbcType=INTEGER,javaType=SexEnum,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler})
+	</insert>
+</mapper>
